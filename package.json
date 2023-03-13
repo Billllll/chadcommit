@@ -2,7 +2,7 @@
   "name": "chadcommit",
   "displayName": "chadCommit",
   "description": "Suggests conventional commit message using GPT 3.5 turbo, by analyzing staged git files.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "activationEvents": [],
   "engines": {
     "vscode": "^1.76.0"
@@ -14,11 +14,15 @@
   "publisher": "lennartlence",
   "pricing": "Trial",
   "keywords": [
+    "ai",
     "git",
-    "graph",
-    "visualise",
     "diff",
-    "action"
+    "action",
+    "chatgpt",
+    "conventional",
+    "commit",
+    "openai",
+    "gpt 3.5"
   ],
   "categories": [
     "Other"
