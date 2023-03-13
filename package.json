@@ -1,0 +1,96 @@
+{
+  "name": "chadcommit",
+  "displayName": "chadCommit",
+  "description": "Suggests conventional commit message using GPT 3.5 turbo, by analyzing staged git files.",
+  "version": "0.1.0",
+  "activationEvents": [],
+  "engines": {
+    "vscode": "^1.76.0"
+  },
+  "author": {
+    "name": "Lennart Le",
+    "email": "lennartlence@gmail.com"
+  },
+  "publisher": "lennartlence",
+  "pricing": "Trial",
+  "keywords": [
+    "git",
+    "graph",
+    "visualise",
+    "diff",
+    "action"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "icon": "resources/icon.png",
+  "main": "out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "chadCommit",
+      "properties": {
+        "chadcommit.openAiKey": {
+          "type": "string",
+          "default": "",
+          "description": "(Required) API key to access the OpenAI"
+        },
+        "chadcommit.unlocker": {
+          "type": "string",
+          "default": "",
+          "description": "(Required)"
+        },
+        "chadcommit.useEmoji": {
+          "type": "boolean",
+          "default": true,
+          "description": "Prefix messages with representative emojis"
+        }
+      }
+    },
+    "commands": [
+      {
+        "category": "chadCommit",
+        "command": "chadcommit.suggest",
+        "title": "Suggest a commit message",
+        "icon": {
+          "light": "resources/cmd-icon-light.svg",
+          "dark": "resources/cmd-icon-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "chadcommit.suggest",
+          "group": "navigation",
+          "when": "scmProvider == 'git'"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p . && terser out/extension.js -o out/extension.js -c -m",
+    "watch": "tsc -watch -p .",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.76.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "@vscode/test-electron": "^2.2.3",
+    "eslint": "^8.34.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "terser": "^5.16.6",
+    "typescript": "^4.9.5"
+  }
+}
