@@ -2,6 +2,8 @@
 
 This extension helps you make descriptive commit messages with no hassle. It uses ChatGPT 3.5 turbo (10x cheaper than other models) to suggest you a fitting text based on what changes you've staged. So you can play with it and find perfect commit or edit it.
 
+It still cannot generate perfect commits all the time, because lack of context and limits of GPT, so use it mostly as a suggestion.
+
 ## See it in action
 
 ![feature X](https://i.imgur.com/3GJmtMC.gif)

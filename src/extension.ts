@@ -120,7 +120,7 @@ const suggest = async (context: vscode.ExtensionContext) => {
 			return;
 		}
 
-		await openAiCompletion({ messages, apiKey: openAiKey, onText: (text) => currentRepo.inputBox.value = text })
+		await turboCompletion({ messages, apiKey: openAiKey, onText: (text) => currentRepo.inputBox.value = text })
 
 		if (numTrialCalls) {
 			context.globalState.update("chadcommit.numTrialCalls", --numTrialCalls);
@@ -134,36 +134,7 @@ const suggest = async (context: vscode.ExtensionContext) => {
 const generateMessages = ({ prompt = '', useEmoji = false }): Array<{ role: string, content: string }> => [
 	{
 		role: 'system',
-		content: `You are to act as the author of a commit message in git. Your mission is to create clean and comprehensive commit messages in the conventional commit convention. I'll send you an output of 'git diff --staged' command, and you convert it into a commit message. ${useEmoji ? 'Use Gitmoji convention to preface the commit' : 'Do not preface the commit with anything'}, use the present tense. Don't add any descriptions to the commit, only commit message.`
-	},
-	{
-		role: 'user',
-		content: `diff --git a/src/server.ts b/src/server.ts
-	index ad4db42..f3b18a9 100644
-	--- a/src/server.ts
-	+++ b/src/server.ts
-	@@ -10,7 +10,7 @@ import {
-	  initWinstonLogger();
-	  
-	  const app = express();
-	-const port = 7799;
-	+const PORT = 7799;
-	  
-	  app.use(express.json());
-	  
-	@@ -34,6 +34,6 @@ app.use((_, res, next) => {
-	  // ROUTES
-	  app.use(PROTECTED_ROUTER_URL, protectedRouter);
-	  
-	-app.listen(port, () => {
-	-  console.log(\`Server listening on port \${port}\`);
-	+app.listen(process.env.PORT || PORT, () => {
-	+  console.log(\`Server listening on port \${PORT}\`);
-	  });`
-	},
-	{
-		role: 'assistant',
-		content: `${useEmoji ? '🐛 ' : ''}fix(server.ts): change port variable case from lowercase port to uppercase PORT\n${useEmoji ? '✨ ' : ''}feat(server.ts): add support for process.env.PORT environment variable`
+		content: `You are a generator of commit messages, you analyze given git diff, you follow bassic commitlint rules to respond with a message that describes changes in smallest form possible. Example: "${useEmoji ? '🚀' : ''}feat(player) add captions\n${useEmoji ? '🔨' : ''}refactor(player) improve support for newer formats\n${useEmoji ? '⚙️' : ''}chore(dependencies): update terser to 5.16.6"`
 	},
 	{
 		role: 'user',
@@ -171,7 +142,8 @@ const generateMessages = ({ prompt = '', useEmoji = false }): Array<{ role: stri
 	}
 ]
 
-const openAiCompletion = ({
+
+const turboCompletion = ({
 	messages = [],
 	apiKey = '',
 	onText = () => null
@@ -201,11 +173,14 @@ const openAiCompletion = ({
 			let fullText = '';
 
 			res.on('data', chunk => {
-				const delta = decoder.decode(chunk).match(/"delta":\s*({.*?"content":\s*".*?"})/)?.[1];
-				if (delta) {
-					const content = JSON.parse(delta).content;
-					fullText += content;
-					onText(fullText);
+				const contentMatches = decoder.decode(chunk).matchAll(/\{"content":"[^\}]*"\}/g)
+
+				for (const match of contentMatches) {
+					const { content } = JSON.parse(match[0])
+
+					fullText += content
+
+					onText(fullText)
 				}
 			});
 

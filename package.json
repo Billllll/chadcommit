@@ -2,7 +2,7 @@
   "name": "chadcommit",
   "displayName": "chadCommit",
   "description": "Suggests conventional commit message using GPT 3.5 turbo, by analyzing staged git files.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "activationEvents": [],
   "engines": {
     "vscode": "^1.76.0"
