@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { request } from "https";
-import { createHash } from 'crypto';
 import { TextDecoder } from 'util';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -14,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		isProcessing = true
 
-		await suggest(context)
+		await suggest()
 
 		isProcessing = false
 	});
@@ -24,14 +23,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() { }
 
-const suggest = async (context: vscode.ExtensionContext) => {
+const suggest = async () => {
 	try {
 		const config = vscode.workspace.getConfiguration('chadcommit')
 
 		const openAiKey: string | undefined = config.get('openAiKey')
 		const useEmoji: boolean | undefined = config.get('useEmoji')
-
-		const licensed = createHash('sha256').update(config.get('unlocker') || '').digest('hex') === '453a16f42545d833964fca7c1684896d0dc4e0d44d615fe46a5cf43e004e4988'
 
 		if (!openAiKey) {
 			const action = "Go to Settings"
@@ -43,27 +40,6 @@ const suggest = async (context: vscode.ExtensionContext) => {
 					}
 				});
 			return;
-		}
-
-		let numTrialCalls: number | undefined
-
-		if (!licensed) {
-			numTrialCalls = context.globalState.get("chadcommit.numTrialCalls") || 10
-
-			if (numTrialCalls === 1) {
-				const promptUserActionPurchase = "Get the Code 🔑";
-				const promptUserActionEnterKey = "Paste it here 🔓";
-
-				vscode.window.showWarningMessage(`🚨 Hey, yo. As a developer, sure you understand how much time and effort goes into solo building and maintaining code. If you'd like to continue using it, please purchase an Unlocker Code. Your support would be greatly appreciated 🤙. And as a thank you, I'll be sure to open source it later!`, promptUserActionPurchase, promptUserActionEnterKey)
-					.then(selectedItem => {
-						if (selectedItem === promptUserActionPurchase) {
-							vscode.env.openExternal(vscode.Uri.parse("https://ko-fi.com/s/2660538a29"));
-						} else if (selectedItem === promptUserActionEnterKey) {
-							vscode.commands.executeCommand("workbench.action.openSettings", "chadcommit.unlocker");
-						}
-					});
-				return
-			}
 		}
 
 		const gitExtension = vscode.extensions.getExtension('vscode.git');
@@ -122,9 +98,6 @@ const suggest = async (context: vscode.ExtensionContext) => {
 
 		await turboCompletion({ messages, apiKey: openAiKey, onText: (text) => currentRepo.inputBox.value = text })
 
-		if (numTrialCalls) {
-			context.globalState.update("chadcommit.numTrialCalls", --numTrialCalls);
-		}
 	} catch (error: any) {
 		vscode.window.showErrorMessage(error.toString());
 	}

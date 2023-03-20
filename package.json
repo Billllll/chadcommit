@@ -2,7 +2,7 @@
   "name": "chadcommit",
   "displayName": "chadCommit",
   "description": "Suggests conventional commit message using GPT 3.5 turbo, by analyzing staged git files.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "activationEvents": [],
   "engines": {
     "vscode": "^1.76.0"
@@ -12,7 +12,7 @@
     "email": "lennartlence@gmail.com"
   },
   "publisher": "lennartlence",
-  "pricing": "Trial",
+  "pricing": "Free",
   "keywords": [
     "ai",
     "git",
@@ -41,11 +41,6 @@
           "type": "string",
           "default": "",
           "description": "(Required) API key to access the OpenAI"
-        },
-        "chadcommit.unlocker": {
-          "type": "string",
-          "default": "",
-          "description": "(Required)"
         },
         "chadcommit.useEmoji": {
           "type": "boolean",
