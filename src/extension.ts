@@ -3,19 +3,26 @@ import { request } from "https";
 import { TextDecoder } from 'util';
 
 export function activate(context: vscode.ExtensionContext) {
-	let isProcessing = false
+	let cancellationTokenSource: vscode.CancellationTokenSource | null = null
 
 	let disposable = vscode.commands.registerCommand('chadcommit.suggest', async () => {
-		if (isProcessing) {
-			vscode.window.showInformationMessage('Thinking...');
+		if (cancellationTokenSource) {
+			vscode.window.showInformationMessage('Thinking...', 'Cancel').then(selectedItem => {
+				if (selectedItem === 'Cancel') {
+					cancellationTokenSource?.cancel()
+					cancellationTokenSource?.dispose()
+					cancellationTokenSource = null
+				}
+			});
 			return
+		} else {
+			cancellationTokenSource = new vscode.CancellationTokenSource();
 		}
 
-		isProcessing = true
+		await suggest(cancellationTokenSource.token)
 
-		await suggest()
-
-		isProcessing = false
+		cancellationTokenSource.dispose()
+		cancellationTokenSource = null
 	});
 
 	context.subscriptions.push(disposable);
@@ -23,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() { }
 
-const suggest = async () => {
+const suggest = async (cancelToken: vscode.CancellationToken) => {
 	try {
 		const config = vscode.workspace.getConfiguration('chadcommit')
 
@@ -60,8 +67,8 @@ const suggest = async () => {
 
 		const stagedChangesDiff = await currentRepo.diffIndexWith('HEAD');
 
-		if (!stagedChangesDiff) {
-			vscode.window.showErrorMessage('Failed to get the diff of the staged changes!');
+		if (stagedChangesDiff.length === 0) {
+			vscode.window.showErrorMessage('There is no staged changes!');
 			return;
 		}
 
@@ -96,18 +103,21 @@ const suggest = async () => {
 			return;
 		}
 
-		await turboCompletion({ messages, apiKey: openAiKey, onText: (text) => currentRepo.inputBox.value = text })
-
+		await turboCompletion({
+			messages,
+			apiKey: openAiKey,
+			onText: (text) => currentRepo.inputBox.value = text,
+			cancelToken
+		});
 	} catch (error: any) {
 		vscode.window.showErrorMessage(error.toString());
 	}
 }
 
-
 const generateMessages = ({ prompt = '', useEmoji = false }): Array<{ role: string, content: string }> => [
 	{
-		role: 'system',
-		content: `You are a generator of commit messages, you analyze given git diff, you follow bassic commitlint rules to respond with a message that describes changes in smallest form possible. Example: "${useEmoji ? '🚀' : ''}feat(player) add captions\n${useEmoji ? '🔨' : ''}refactor(player) improve support for newer formats\n${useEmoji ? '⚙️' : ''}chore(dependencies): update terser to 5.16.6"`
+		role: 'user',
+		content: `Analyze a git diff and make a short conventional commit message, follow this template: ${useEmoji ? "🚀" : ""}feat(scope) [message]\n${useEmoji ? "🛠️" : ""}refactor(scope) [message]\n${useEmoji ? "⚙️" : ""}chore(scope) [message];  Response example: "${useEmoji ? "🚀" : ""}feat(player) add captions\n${useEmoji ? "🛠️" : ""}refactor(player) support new formats\n${useEmoji ? "⚙️" : ""}chore(dependencies) upgrade terser to 5.16.6"`
 	},
 	{
 		role: 'user',
@@ -115,16 +125,16 @@ const generateMessages = ({ prompt = '', useEmoji = false }): Array<{ role: stri
 	}
 ]
 
+type TurboCompletionProps = {
+	messages: Array<{ role: string; content: string }>;
+	apiKey: string;
+	onText: (text: string) => void;
+	cancelToken: vscode.CancellationToken;
+};
 
-const turboCompletion = ({
-	messages = [],
-	apiKey = '',
-	onText = () => null
-}: {
-	messages: Array<{ role: string, content: string }>,
-	apiKey: string,
-	onText: (text: string) => void
-}) => {
+type TurboCompletion = (props: TurboCompletionProps) => Promise<void | string>;
+
+const turboCompletion: TurboCompletion = ({ messages, apiKey, onText, cancelToken }) => {
 	return new Promise((resolve, reject) => {
 		const options = {
 			method: 'POST',
@@ -174,5 +184,10 @@ const turboCompletion = ({
 		}));
 
 		req.end();
+
+		cancelToken.onCancellationRequested(() => {
+			req.destroy();
+			resolve();
+		});
 	});
 };

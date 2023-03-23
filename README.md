@@ -1,16 +1,18 @@
 # chadCommit
 
-This extension helps you make descriptive commit messages with no hassle. It uses ChatGPT 3.5 turbo (10x cheaper than other models) to suggest you a fitting text based on what changes you've staged. So you can play with it and find perfect commit or edit it.
+[![Support](https://img.shields.io/badge/Say%20thanks%20on%20Patreon-white?style=flat&logo=patreon)](https://patreon.com/lennartle)
 
-It still cannot generate perfect commits all the time, because lack of context and limits of GPT, so use it mostly as a suggestion.
+This extension simplifies the process of making descriptive commit messages. It utilizes ChatGPT 3.5 Turbo (10x more cost-effective than competing models) to suggest suitable text based on the changes you've staged. You can experiment with the suggestions and find the ideal commit message or edit it as needed.
+
+However, due to limitations in context understanding and the inherent constraints of GPT, it may not generate perfect commit messages every time. Thus, it is best to use this tool primarily for suggestions.
 
 ## See it in action
 
-![feature X](https://i.imgur.com/3GJmtMC.gif)
+![Preview](https://i.imgur.com/HpWqdj3.gif)
 
 ## Requirements
 
 * You should obtain an OpenAI API key here:
   https://platform.openai.com/account/api-keys
 
-* Try to keep your commits small, unstage less important, big, and auto-generated files like package-lock before hitting the suggest button, otherwise you may encounter a token limit error, which is roughly 500 words.
+* It is recommended to keep your commits small. Unstage less significant, large, and auto-generated files (such as package-lock) before clicking the "Suggest" button to avoid token limit errors, which occur at around 500 words.
