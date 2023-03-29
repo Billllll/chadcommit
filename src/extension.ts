@@ -156,10 +156,14 @@ const turboCompletion: TurboCompletion = ({ messages, apiKey, onText, cancelToke
 			let fullText = '';
 
 			res.on('data', chunk => {
-				const contentMatches = decoder.decode(chunk).matchAll(/\{"content":"[^\}]*"\}/g)
+				const dataMatches = decoder.decode(chunk).matchAll(/data: ({.*})\n/g)
 
-				for (const match of contentMatches) {
-					const { content } = JSON.parse(match[0])
+				for (const match of dataMatches) {
+					const { content } = JSON.parse(match[1]).choices[0].delta
+
+					if (!content) {
+						continue
+					}
 
 					fullText += content
 
