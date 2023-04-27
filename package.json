@@ -1,16 +1,20 @@
 {
   "name": "chadcommit",
   "displayName": "chadCommit",
-  "description": "Suggests conventional commit message using GPT 3.5 turbo, by analyzing staged git files.",
-  "version": "0.2.3",
+  "description": "Suggests conventional commit message using GPT 3.5 turbo or GPT 4, by analyzing staged git files.",
+  "version": "0.3.1",
   "activationEvents": [],
   "engines": {
     "vscode": "^1.76.0"
   },
   "author": {
-    "name": "Lennart Le",
+    "name": "lennartle",
     "email": "lennartlence@gmail.com"
   },
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lennartle/chadcommit.git"
+	},
   "publisher": "lennartlence",
   "pricing": "Free",
   "keywords": [
@@ -22,7 +26,8 @@
     "conventional",
     "commit",
     "openai",
-    "gpt 3.5"
+    "gpt 3.5",
+    "gpt 4"
   ],
   "categories": [
     "Other"
@@ -42,10 +47,16 @@
           "default": "",
           "description": "(Required) API key to access the OpenAI"
         },
-        "chadcommit.useEmoji": {
-          "type": "boolean",
-          "default": true,
-          "description": "Prefix messages with representative emojis"
+        "chadcommit.prompt": {
+          "type": "string",
+          "default": "Analyze a git diff and make a short conventional commit message, follow this template: 🚀feat(scope) [message]\\n🛠️refactor(scope) [message]\\n⚙️chore(scope) [message]; Response example: 🚀feat(player) add captions\\n🛠️refactor(player) support new formats\\n⚙️chore(dependencies) upgrade terser to 5.16.6",
+          "description": "Edit this to fit your preferred form of the commit message, change it as you want"
+        },
+        "chadcommit.model": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "enum": ["gpt-3.5-turbo", "gpt-4"],
+          "description": "Choose preferred GPT model"
         }
       }
     },
