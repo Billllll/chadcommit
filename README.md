@@ -6,7 +6,7 @@ However, due to limitations in context understanding and the inherent constraint
 
 ## See it in action
 
-![Preview](https://i.imgur.com/HpWqdj3.gif)
+![Preview](https://raw.githubusercontent.com/lennartle/chadcommit/d9e8cfec7e8cc1e98afd7cbde05394697393ef47/preview.gif)
 
 ## Customizing messages
 You can edit the GPT prompt in the extension settings to fit your preferred style of messages.
