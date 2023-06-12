@@ -20,4 +20,4 @@ Analyze a git diff and make a short conventional commit message, follow this tem
 * You should obtain an OpenAI API key here:
   https://platform.openai.com/account/api-keys
 
-* It is recommended to keep your commits small. Unstage less significant, large, and auto-generated files (such as package-lock) before clicking the "Suggest" button to avoid token limit errors, which occur at around 500 words for GPT 3.5 and 1000 words for GPT 4.
+* It is recommended to keep your commits small. Unstage less significant, large, and auto-generated files (such as package-lock) before clicking the "Suggest" button to avoid context length errors.

@@ -1,3 +1,6 @@
+## [0.3.4]
+- Changed icons
+- Remove custom context length error to be handled by openai errors
 ## [0.3.1]
 - Added support for GPT 4
 - Added prompt customization
