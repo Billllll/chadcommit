@@ -11,10 +11,10 @@
     "name": "lennartle",
     "email": "lennartlence@gmail.com"
   },
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/lennartle/chadcommit.git"
-	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lennartle/chadcommit.git"
+  },
   "publisher": "lennartlence",
   "pricing": "Free",
   "keywords": [
@@ -55,7 +55,12 @@
         "chadcommit.model": {
           "type": "string",
           "default": "gpt-3.5-turbo",
-          "enum": ["gpt-3.5-turbo", "gpt-4", "gpt-4-1106-preview"],
+          "enum": [
+            "gpt-3.5-turbo",
+            "gpt-4",
+            "gpt-4-1106-preview",
+            "gpt-3.5-turbo-0125"
+          ],
           "description": "Choose preferred GPT model"
         }
       }
