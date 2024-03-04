@@ -49,7 +49,7 @@
         },
         "chadcommit.prompt": {
           "type": "string",
-          "default": "<s>[INST]Analyze every line of git diff info and make a short conventional commit message, follow the following tripled template:  '''[suitable emoji]feat (filename) [message]\n[suitable emoji]refactor (filename) [message]\n[suitable emoji]chore (filename) [message]'''\nCommit message example: '''🚀feat (player.ts) add captions\n🛠️refactor (player.ts) support new formats\n⚙️chore (dependencies.json) upgrade terser to 5.16.6''' Only return commit message. No explanation/description. [/INST]\n User: Git diff info: \n '''${diff}'''\n Assistant: After analyzing the whole diff info, the commit message without any explanation/description could be: '\n",
+          "default": "<s>[INST]Analyze every line of git diff info and make a short conventional commit message, follow the following tripled template:  '''[suitable ios emoji]feat (filename) [message]\n[suitable ios emoji]refactor (filename) [message]\n[suitable ios emoji]chore (filename) [message]'''\nCommit message example: '''🚀feat (player.ts) add captions\n🛠️refactor (player.ts) support new formats\n⚙️chore (dependencies.json) upgrade terser to 5.16.6''' Only return commit message. No explanation/description. [/INST]\n User: Git diff info: \n '''${diff}'''\n Assistant: After analyzing the whole diff info, the commit message without any explanation/description could be: '\n",
           "description": "Edit this to fit your preferred form of the commit message, change it as you want"
         },
         "chadcommit.model": {
