@@ -1,3 +1,5 @@
+// This file implements the VS Code extension "chadcommit".
+// It adds a command to suggest a conventional commit message based on a git diff.
 import * as vscode from "vscode";
 import { request } from "https";
 import { TextDecoder } from "util";
