@@ -137,20 +137,21 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
       return;
     }
 
+    const promptWithInst = prompt.replace(
+      "${diff}",
+      `${parsed.join("\n")}\n\n${deleted.join("\n")}\n\n${renamed.join("\n")}`,
+    );
+
     await turboCompletion({
       opts: {
         messages: [
           {
             role: "user",
-            content: `"${prompt}"`,
-          },
-          {
-            role: "user",
-            content: `${parsed.join("\n")}\n\n${deleted.join("\n")}\n\n${renamed.join("\n")}`,
+            content: promptWithInst,
           },
         ],
         model,
-        max_tokens: 256,
+        max_tokens: 512,
         stream: true,
       },
       apiKey: openAiKey,
