@@ -125,12 +125,7 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
       }
     }
 
-    if (
-      model !== "gpt-3.5-turbo" &&
-      model !== "gpt-4" &&
-      model !== "gpt-4-1106-preview" &&
-      model !== "gpt-3.5-turbo-0125"
-    ) {
+    if (model !== "mixtral-8x7b-32768" && model !== "llama2-70b-chat") {
       vscode.window.showErrorMessage("Completion model is not set!");
       return;
     }
@@ -168,11 +163,7 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
 type TurboCompletion = (props: {
   opts: {
     messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
-    model:
-      | "gpt-3.5-turbo"
-      | "gpt-4"
-      | "gpt-4-1106-preview"
-      | "gpt-3.5-turbo-0125";
+    model: "mixtral-8x7b-32768" | "llama2-70b-chat";
     max_tokens: number;
     stream: boolean;
   };
@@ -191,10 +182,8 @@ type TurboCompletion = (props: {
  *   opts: {
  *     messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
  *     model:
- *       | "gpt-3.5-turbo"
- *       | "gpt-4"
- *       | "gpt-4-1106-preview"
- *       | "gpt-3.5-turbo-0125";
+ *       | "mixtral-8x7b-32768"
+ *       | "llama2-70b-chat";
  *     max_tokens: number;
  *     stream: boolean;
  *   };
@@ -213,7 +202,7 @@ const turboCompletion: TurboCompletion = ({
   return new Promise((resolve, reject) => {
     const options = {
       method: "POST",
-      hostname: "api.openai.com",
+      hostname: "api.groq.com/openai",
       path: "/v1/chat/completions",
       headers: {
         Authorization: `Bearer ${apiKey}`,

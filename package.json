@@ -8,14 +8,14 @@
     "vscode": "^1.76.0"
   },
   "author": {
-    "name": "lennartle",
-    "email": "lennartlence@gmail.com"
+    "name": "jbl",
+    "email": "jdl@example.com"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/lennartle/chadcommit.git"
   },
-  "publisher": "lennartlence",
+  "publisher": "jbl",
   "pricing": "Free",
   "keywords": [
     "ai",
@@ -54,12 +54,10 @@
         },
         "chadcommit.model": {
           "type": "string",
-          "default": "gpt-3.5-turbo",
+          "default": "mixtral-8x7b-32768",
           "enum": [
-            "gpt-3.5-turbo",
-            "gpt-4",
-            "gpt-4-1106-preview",
-            "gpt-3.5-turbo-0125"
+            "mixtral-8x7b-32768",
+            "llama2-70b-chat"
           ],
           "description": "Choose preferred GPT model"
         }
