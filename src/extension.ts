@@ -2,6 +2,19 @@ import * as vscode from "vscode";
 import { request } from "https";
 import { TextDecoder } from "util";
 
+/**
+ * This function registers the "chadcommit.suggest" command.
+ *
+ * When the command is invoked, it shows a prompt asking if the user wants to cancel the operation if it's already running.
+ * If the user confirms cancelation, the operation is canceled and the extension is ready to start a new one.
+ * If the user doesn't confirm cancelation, the extension starts a new operation using the provided cancellation token.
+ *
+ * This command is triggered by the "CHAD: Suggest commit message" command in the Command Palette.
+ *
+ * 💡 This is the main entry point for the extension's functionality.
+ *
+ * @param context The extension context.
+ */
 export function activate(context: vscode.ExtensionContext) {
   let cancellationTokenSource: vscode.CancellationTokenSource | null = null;
 
@@ -35,6 +48,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
+/**
+ * 💡 Suggest a commit message using OpenAI.
+ *
+ * This function is triggered by the "CHAD: Suggest commit message" command in the Command Palette.
+ *
+ * @param cancelToken The cancellation token to cancel the request.
+ */
 const suggest = async (cancelToken: vscode.CancellationToken) => {
   try {
     const config = vscode.workspace.getConfiguration("chadcommit");
@@ -161,6 +181,29 @@ type TurboCompletion = (props: {
   cancelToken: vscode.CancellationToken;
 }) => Promise<void | string>;
 
+/**
+ * Make a TurboCompletion request to OpenAI's API and stream the results
+ * to the `onText` callback.
+ *
+ * 🚀💡
+ *
+ * @param {{
+ *   opts: {
+ *     messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
+ *     model:
+ *       | "gpt-3.5-turbo"
+ *       | "gpt-4"
+ *       | "gpt-4-1106-preview"
+ *       | "gpt-3.5-turbo-0125";
+ *     max_tokens: number;
+ *     stream: boolean;
+ *   };
+ *   apiKey: string;
+ *   onText: (text: string) => void;
+ *   cancelToken: vscode.CancellationToken;
+ * }} props
+ * @returns {Promise<void | string>}
+ */
 const turboCompletion: TurboCompletion = ({
   opts,
   apiKey,
