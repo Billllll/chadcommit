@@ -202,8 +202,8 @@ const turboCompletion: TurboCompletion = ({
   return new Promise((resolve, reject) => {
     const options = {
       method: "POST",
-      hostname: "api.groq.com/openai",
-      path: "/v1/chat/completions",
+      hostname: "api.groq.com",
+      path: "/openai/v1/chat/completions",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
