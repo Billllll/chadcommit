@@ -137,17 +137,16 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
       return;
     }
 
-    const promptWithInst = prompt.replace(
-      "${diff}",
-      `${parsed.join("\n")}\n\n${deleted.join("\n")}\n\n${renamed.join("\n")}`,
-    );
-
     await turboCompletion({
       opts: {
         messages: [
           {
+            role: "system",
+            content: prompt,
+          },
+          {
             role: "user",
-            content: promptWithInst,
+            content: `Git diff info in triple quotes:\n'''\n${parsed.join("\n")}\n\n${deleted.join("\n")}\n\n${renamed.join("\n")}\n'''\n`,
           },
         ],
         model,
@@ -217,29 +216,47 @@ const turboCompletion: TurboCompletion = ({
       const decoder = new TextDecoder("utf8");
 
       if (res.statusCode !== 200) {
+        let errorData = "";
         res.on("data", (chunk) => {
-          reject(
-            `OpenAI: ${res.statusCode} - ${JSON.parse(decoder.decode(chunk) || "{}")?.error?.code || "unknown"}`,
-          );
+          errorData += decoder.decode(chunk);
+        });
+        res.on("end", () => {
+          try {
+            const errorObj = JSON.parse(errorData || "{}");
+            reject(
+              `OpenAI: ${res.statusCode} - ${errorObj.error?.code || "unknown"}`,
+            );
+          } catch (e) {
+            reject(`OpenAI: ${res.statusCode} - Error parsing error response`);
+          }
         });
         return;
       }
 
       let fullText = "";
+      let buffer = "";
 
       res.on("data", (chunk) => {
-        const dataMatches = decoder.decode(chunk).matchAll(/data: ({.*})\n/g);
-
-        for (const match of dataMatches) {
-          const { content } = JSON.parse(match[1]).choices[0].delta;
-
-          if (!content) {
-            continue;
+        buffer += decoder.decode(chunk);
+        let eolIndex;
+        while ((eolIndex = buffer.indexOf("\n")) >= 0) {
+          const line = buffer.substring(0, eolIndex).trim();
+          buffer = buffer.substring(eolIndex + 1);
+          if (line.startsWith("data:")) {
+            if (line === "data: [DONE]") {
+              resolve(fullText);
+            }
+            try {
+              const data = JSON.parse(line.substring(5));
+              const content = data.choices[0].delta.content;
+              if (content) {
+                fullText += content;
+                onText(fullText);
+              }
+            } catch (e: any) {
+              reject("Error parsing SSE data: " + e.message);
+            }
           }
-
-          fullText += content;
-
-          onText(fullText);
         }
       });
 
