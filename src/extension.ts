@@ -150,7 +150,7 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
           },
         ],
         model,
-        max_tokens: 256,
+        max_tokens: 1024,
         stream: true,
       },
       apiKey: openAiKey,
