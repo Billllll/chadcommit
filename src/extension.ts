@@ -127,7 +127,7 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
       }
     }
 
-    if (model !== "mixtral-8x7b-32768" && model !== "llama2-70b-chat") {
+    if (model !== "mixtral-8x7b-32768" && model !== "llama2-70b-4096") {
       vscode.window.showErrorMessage("Completion model is not set!");
       return;
     }
@@ -165,7 +165,7 @@ const suggest = async (cancelToken: vscode.CancellationToken) => {
 type TurboCompletion = (props: {
   opts: {
     messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
-    model: "mixtral-8x7b-32768" | "llama2-70b-chat";
+    model: "mixtral-8x7b-32768" | "llama2-70b-4096";
     max_tokens: number;
     stream: boolean;
   };
@@ -185,7 +185,7 @@ type TurboCompletion = (props: {
  *     messages: Array<{ role: "user" | "assistant" | "system"; content: string }>;
  *     model:
  *       | "mixtral-8x7b-32768"
- *       | "llama2-70b-chat";
+ *       | "llama2-70b-4096";
  *     max_tokens: number;
  *     stream: boolean;
  *   };
