@@ -1,109 +1,109 @@
 {
-  "name": "chadcommit",
-  "displayName": "chadCommit",
-  "description": "Suggests conventional commit message using GPT 3.5 turbo or GPT 4, by analyzing staged git files.",
-  "version": "0.3.5",
-  "activationEvents": [],
-  "engines": {
-    "vscode": "^1.76.0"
-  },
-  "author": {
-    "name": "jbl",
-    "email": "jdl@example.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lennartle/chadcommit.git"
-  },
-  "publisher": "jbl",
-  "pricing": "Free",
-  "keywords": [
-    "ai",
-    "git",
-    "diff",
-    "action",
-    "chatgpt",
-    "conventional",
-    "commit",
-    "openai",
-    "gpt 3.5",
-    "gpt 4"
-  ],
-  "categories": [
-    "Other"
-  ],
-  "extensionDependencies": [
-    "vscode.git"
-  ],
-  "icon": "resources/icon.png",
-  "main": "out/extension.js",
-  "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "chadCommit",
-      "properties": {
-        "chadcommit.openAiKey": {
-          "type": "string",
-          "default": "",
-          "description": "(Required) API key to access the OpenAI"
-        },
-        "chadcommit.prompt": {
-          "type": "string",
-          "default": "Your are an AI assistant that analyze git diff info and make a short and summarized conventional commit message follow the template in triple quotes below:\n'''\n[suitable emoji]feat(filename) [message]\n[suitable emoji]refactor(filename) [message]\n[suitable emoji]chore(filename) [message]\n'''\nCommit message example:\n'''\n🚀feat(player.ts) add captions\n🛠️refactor(player.ts) support new formats\n⚙️chore(dependencies.json) upgrade terser to 5.16.6\n'''\nOnly return commit message.\nNever return explanations or descriptions.",
-          "description": "Edit this to fit your preferred form of the commit message, change it as you want"
-        },
-        "chadcommit.model": {
-          "type": "string",
-          "default": "mixtral-8x7b-32768",
-          "enum": [
-            "mixtral-8x7b-32768",
-            "llama2-70b-4096"
-          ],
-          "description": "Choose preferred GPT model"
-        }
-      }
-    },
-    "commands": [
-      {
-        "category": "chadCommit",
-        "command": "chadcommit.suggest",
-        "title": "Suggest a commit message",
-        "icon": {
-          "light": "resources/cmd-icon-light.svg",
-          "dark": "resources/cmd-icon-dark.svg"
-        }
-      }
-    ],
-    "menus": {
-      "scm/title": [
-        {
-          "command": "chadcommit.suggest",
-          "group": "navigation",
-          "when": "scmProvider == 'git'"
-        }
-      ]
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p . && terser out/extension.js -o out/extension.js -c -m",
-    "watch": "tsc -watch -p .",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.76.0",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/parser": "^5.53.0",
-    "@vscode/test-electron": "^2.2.3",
-    "eslint": "^8.34.0",
-    "glob": "^8.1.0",
-    "mocha": "^10.2.0",
-    "terser": "^5.16.6",
-    "typescript": "^4.9.5"
-  }
+	"name": "chadcommit",
+	"displayName": "chadCommit",
+	"description": "Suggests conventional commit message using GPT 3.5 turbo or GPT 4, by analyzing staged git files.",
+	"version": "0.3.5",
+	"activationEvents": [],
+	"engines": {
+		"vscode": "^1.76.0"
+	},
+	"author": {
+		"name": "jbl",
+		"email": "jdl@example.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lennartle/chadcommit.git"
+	},
+	"publisher": "jbl",
+	"pricing": "Free",
+	"keywords": [
+		"ai",
+		"git",
+		"diff",
+		"action",
+		"chatgpt",
+		"conventional",
+		"commit",
+		"openai",
+		"gpt 3.5",
+		"gpt 4"
+	],
+	"categories": [
+		"Other"
+	],
+	"extensionDependencies": [
+		"vscode.git"
+	],
+	"icon": "resources/icon.png",
+	"main": "out/extension.js",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "chadCommit",
+			"properties": {
+				"chadcommit.openAiKey": {
+					"type": "string",
+					"default": "",
+					"description": "(Required) API key to access the OpenAI"
+				},
+				"chadcommit.prompt": {
+					"type": "string",
+					"default": "Your are an AI assistant that analyze git diff info and make a short and summarized conventional commit message follow the template in triple quotes below:\n'''\n[suitable emoji]feat(filename) [message]\n[suitable emoji]refactor(filename) [message]\n[suitable emoji]chore(filename) [message]\n'''\nCommit message example:\n'''\n🚀feat(player.ts) add captions\n🛠️refactor(player.ts) support new formats\n⚙️chore(dependencies.json) upgrade terser to 5.16.6\n'''\nOnly return commit message.\nNever return explanations or descriptions.",
+					"description": "Edit this to fit your preferred form of the commit message, change it as you want"
+				},
+				"chadcommit.model": {
+					"type": "string",
+					"default": "llama-3.1-70b-versatile",
+					"enum": [
+						"llama-3.1-8b-instant",
+						"llama-3.1-70b-versatile"
+					],
+					"description": "Choose preferred GPT model"
+				}
+			}
+		},
+		"commands": [
+			{
+				"category": "chadCommit",
+				"command": "chadcommit.suggest",
+				"title": "Suggest a commit message",
+				"icon": {
+					"light": "resources/cmd-icon-light.svg",
+					"dark": "resources/cmd-icon-dark.svg"
+				}
+			}
+		],
+		"menus": {
+			"scm/title": [
+				{
+					"command": "chadcommit.suggest",
+					"group": "navigation",
+					"when": "scmProvider == 'git'"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p . && terser out/extension.js -o out/extension.js -c -m",
+		"watch": "tsc -watch -p .",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^8.1.0",
+		"@types/mocha": "^10.0.1",
+		"@types/node": "16.x",
+		"@types/vscode": "^1.76.0",
+		"@typescript-eslint/eslint-plugin": "^5.53.0",
+		"@typescript-eslint/parser": "^5.53.0",
+		"@vscode/test-electron": "^2.2.3",
+		"eslint": "^8.34.0",
+		"glob": "^8.1.0",
+		"mocha": "^10.2.0",
+		"terser": "^5.16.6",
+		"typescript": "^4.9.5"
+	}
 }
